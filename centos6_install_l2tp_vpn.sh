@@ -15,12 +15,8 @@ printf "
 #                                                  #
 ####################################################
 "
+#如果ip不对需要手动更改
 vpsip=`hostname -i`
-echo "Please input server IP address:"
-read -p "(Default IP: &vpsip):" vpsip
-if [ "$vpsip" = "" ]; then
-	vpsip= &vpsip
-fi
 
 iprange="10.0.99"
 echo "Please input IP-Range:"
@@ -29,14 +25,12 @@ if [ "$iprange" = "" ]; then
 	iprange="10.0.99"
 fi
 
-mypsk="tanglin"
+mypsk="chenwg.com"
 echo "Please input PSK:"
-read -p "(Default PSK: tanglin):" mypsk
+read -p "(Default PSK: chenwg.com):" mypsk
 if [ "$mypsk" = "" ]; then
-	mypsk="tanglin"
+	mypsk="chenwg.com"
 fi
-
-
 
 clear
 get_char()
@@ -203,11 +197,19 @@ EOF
 clear
 ipsec verify
 printf "
+####################################################
+#                                                  #
+# This is a l2tp vpn shell based Zed Lau           #
+#                                                  #
+# Author: chenwg                                    #
+# Website: http://www.chenwg.com                        #
+#                                                  #
+####################################################
 if there are no [FAILED] above, then you can
 connect to your L2TP VPN Server with the default
 user/pass below:
 ServerIP:$vpsip
-username:test
-password:test123
+username:lolo
+password:1216
 PSK:$mypsk
 "
