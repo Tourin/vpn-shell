@@ -1,10 +1,11 @@
 #############################################
 #file:pptp vpn installing script
-#author:tanglin
+#author:9drops
 #version 1.0
-#description:This is a free software, 
+#description:install_pptp_vpn.sh is a free software, 
 #it's for auto installing vpn in Redhat AS6 or Centos6
-#mail:tanglin5618@gmail.com
+#9drops web site: codingnote.net
+#weibo:zhanbz@hotmail.com
 #############################################
 
 
@@ -61,37 +62,37 @@ clear() {
 
 install() {
 
-	echo 'modprobe tun' >> /etc/rc.modules
-	chmod +x /etc/rc.modules
-	
-	clear
-	rpm -Uhv http://poptop.sourceforge.net/yum/stable/rhel6/pptp-release-current.noarch.rpm
-	yum -y install make libpcap iptables gcc-c++ logrotate tar cpio perl pam tcp_wrappers dkms kernel_ppp_mppe ppp pptpd
-	
-	mknod /dev/ppp c 108 0
-	echo 1 > /proc/sys/net/ipv4/ip_forward
-	echo "mknod /dev/ppp c 108 0" >> /etc/rc.local
-	echo "echo 1 > /proc/sys/net/ipv4/ip_forward" >> /etc/rc.local
-	echo "localip 172.16.36.1" >> /etc/pptpd.conf
-	echo "remoteip 172.16.36.2-254" >> /etc/pptpd.conf
-	echo "ms-dns 8.8.8.8" >> /etc/ppp/options.pptpd
-	echo "ms-dns 8.8.4.4" >> /etc/ppp/options.pptpd
-	echo "$1    pptpd	$2    *" >> /etc/ppp/chap-secrets
-	
-	# get default gateway eth
-	gwEth=$(route -n |grep '^0.0.0.0' |awk '{print $NF}')
-	iptables -A INPUT -i $gwEth -p tcp --dport 1723 -j ACCEPT
-	iptables -A INPUT -i $gwEth -p gre -j ACCEPT
-	iptables -t nat -A POSTROUTING -o $gwEth -j MASQUERADE
-	iptables -A FORWARD -p tcp -s 172.16.36.0/24 -j TCPMSS --syn --set-mss 1356
-	service iptables save
-	service iptables restart 
-	
-	chkconfig iptables on
-	chkconfig pptpd on
-	
-	service iptables start
-	service pptpd start
+echo 'modprobe tun' >> /etc/rc.modules
+chmod +x /etc/rc.modules
+
+clear
+rpm -Uhv http://poptop.sourceforge.net/yum/stable/rhel6/pptp-release-current.noarch.rpm
+yum -y install make libpcap iptables gcc-c++ logrotate tar cpio perl pam tcp_wrappers dkms kernel_ppp_mppe ppp pptpd
+
+mknod /dev/ppp c 108 0
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo "mknod /dev/ppp c 108 0" >> /etc/rc.local
+echo "echo 1 > /proc/sys/net/ipv4/ip_forward" >> /etc/rc.local
+echo "localip 172.16.36.1" >> /etc/pptpd.conf
+echo "remoteip 172.16.36.2-254" >> /etc/pptpd.conf
+echo "ms-dns 8.8.8.8" >> /etc/ppp/options.pptpd
+echo "ms-dns 8.8.4.4" >> /etc/ppp/options.pptpd
+echo "$1    pptpd	$2    *" >> /etc/ppp/chap-secrets
+
+# get default gateway eth
+gwEth=$(route -n |grep '^0.0.0.0' |awk '{print $NF}')
+iptables -A INPUT -i $gwEth -p tcp --dport 1723 -j ACCEPT
+iptables -A INPUT -i $gwEth -p gre -j ACCEPT
+iptables -t nat -A POSTROUTING -o $gwEth -j MASQUERADE
+iptables -A FORWARD -p tcp -s 172.16.36.0/24 -j TCPMSS --syn --set-mss 1356
+service iptables save
+service iptables restart 
+
+chkconfig iptables on
+chkconfig pptpd on
+
+service iptables start
+service pptpd start
 
 }
 
